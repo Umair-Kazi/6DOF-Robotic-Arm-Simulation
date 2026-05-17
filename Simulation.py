@@ -5,6 +5,7 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 
 from ForwardKinematics import ForwardKinematics2D
+from ForwardKinematics import ForwardKinematics3D
 
 def DrawAxes():
     glBegin(GL_LINES)
@@ -63,7 +64,17 @@ def DrawJoints2D(joints):
         glVertex2f(*joints[i])
     glEnd()
 
-angles = [20, 40, -45, 50, 50, 30]
+# angles = [20, 40, -45, 50, 50, 30]
+# lengths = [1, 1, 2, 1, 1, 1]
+
+angles = [
+        (0, 0, 15),
+        (0, 0, 90),
+        (0, 0, -45),
+        (90, 0, 0),
+        (30, 0, 0),
+        (0, -45, 0)
+    ]
 lengths = [1, 1, 2, 1, 1, 1]
 
 def main():
@@ -78,6 +89,7 @@ def main():
 
     mouse_held = False
 
+    # TODO: implement real-time control with keyboard, then XBOX controller
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -98,9 +110,14 @@ def main():
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
         DrawAxes()
         # DrawJoints()
-        x_pos, y_pos = ForwardKinematics2D(angles, lengths)
-        joints = [(0, 0)] + list(zip(x_pos, y_pos))
-        DrawJoints2D(joints)
+        # x_pos, y_pos = ForwardKinematics2D(angles, lengths)
+        # joints = [(0, 0)] + list(zip(x_pos, y_pos))
+        # DrawJoints2D(joints)
+
+        positions = ForwardKinematics3D(angles, lengths)
+        joints = [(0, 0, 0)] + list(positions)
+        DrawJoints(joints)
+
         pygame.display.flip()
         pygame.time.wait(10)
 
