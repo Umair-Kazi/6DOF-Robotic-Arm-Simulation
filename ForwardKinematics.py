@@ -82,12 +82,16 @@ def ForwardKinematics3D(angles, lengths):
 
     positions = []
 
+    LINK3_OFFSET = 11 # degrees
+
     for i in range(len(angles)):
         rx = angles[i][0]
         ry = angles[i][1]
         rz = angles[i][2]
 
         R_joint = rotation_matrix_X(rx) @ rotation_matrix_Y(ry) @ rotation_matrix_Z(rz)
+        if i == 2: # account for physical rotation of linkage
+            R_joint = R_joint @ rotation_matrix_Y(LINK3_OFFSET)
         world_rotation = world_rotation @ R_joint
         direction = world_rotation @ np.array([0, 1, 0])
 
